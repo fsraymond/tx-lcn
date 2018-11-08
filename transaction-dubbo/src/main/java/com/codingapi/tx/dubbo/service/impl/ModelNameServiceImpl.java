@@ -1,17 +1,19 @@
 package com.codingapi.tx.dubbo.service.impl;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ProviderConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.codingapi.tx.listener.service.ModelNameService;
 import com.lorne.core.framework.utils.encode.MD5Util;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Service;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Map;
 
 /**
  * Created by lorne on 2017/7/12.
@@ -19,7 +21,10 @@ import java.util.Map;
 @Service
 public class ModelNameServiceImpl implements ModelNameService {
 
+	@Value("${dubbo.protocol.port}")
+	private int port;
 
+	
     @Autowired
     private ApplicationConfig applicationConfig;
 
@@ -94,6 +99,9 @@ public class ModelNameServiceImpl implements ModelNameService {
         if(registryConfig!=null&&registryConfig.getPort()!=null){
             return registryConfig.getPort();
         }
+        if (port>0) {
+			return port;
+		}
         return 20880;
     }
 }
